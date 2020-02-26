@@ -1,11 +1,20 @@
 package com.example.testapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,11 +29,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.testapp.NotApp.CHANNEL_ID;
 
 
 public class MainActivity extends AppCompatActivity {
     private TextView textView, textView2;
-    private Button button;
+    private Button button, button2;
+
+    private NotificationManagerCompat notificationManager;
 
     ProgressDialog progressDialog;
 
@@ -32,15 +44,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationManager = NotificationManagerCompat.from(this);
+
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
         button = (Button) findViewById(R.id.button);
+        button2 = (Button) findViewById(R.id.button2);
 
-        PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(MyPeriodicWork.class, 20, TimeUnit.MINUTES).build();
-
-        WorkManager.getInstance().enqueue(periodicWorkRequest);
-
-
+        //Button createNotificationButton = findViewById(R.id.button);
+        //PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(MyPeriodicWork.class, 20, TimeUnit.MINUTES).build();
+        //WorkManager.getInstance().enqueue(periodicWorkRequest);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -49,6 +63,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        button2.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+                        .setContentTitle("This is your title")
+                        .setContentText("This is where fuel price will be")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .build();
+                notificationManager.notify(1,notification);
+            }
+        });
+
+
+
     }
 
     private class Content extends AsyncTask<Void,Void,Void> {
@@ -111,6 +139,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return FuelData;
+    }
+
+
+
+    public void showNotification(View v) {
+        Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
+                .setContentTitle("This is your title")
+                .setContentText("This is where fuel price will be")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .build();
+        notificationManager.notify(1,notification);
     }
 
 }
