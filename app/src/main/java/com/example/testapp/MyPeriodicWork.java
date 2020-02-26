@@ -28,7 +28,8 @@ public class MyPeriodicWork extends Worker {
         super(context, workerParams);
     }
 
-    String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+    //String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+    String url = "file:///C:/Users/seval/Desktop/NesteProject/Degvielas%20cenas%20_%20Neste.html";
     String title, name, price, place;
     List<String> FuelData = new ArrayList<String>();
 

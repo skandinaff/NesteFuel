@@ -24,6 +24,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
 
-        //Button createNotificationButton = findViewById(R.id.button);
         //PeriodicWorkRequest periodicWorkRequest = new PeriodicWorkRequest.Builder(MyPeriodicWork.class, 20, TimeUnit.MINUTES).build();
         //WorkManager.getInstance().enqueue(periodicWorkRequest);
 
@@ -63,18 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        button2.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
-                        .setContentTitle("This is your title")
-                        .setContentText("This is where fuel price will be")
-                        .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        .build();
-                notificationManager.notify(1,notification);
-            }
-        });
-
 
 
     }
@@ -111,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<String> GetDataFromNeste() {
 
-        String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+        //String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+        String url = "http://192.168.2.222/neste/cenas.html";
         String title, name, price, place;
         List<String> FuelData = new ArrayList<String>();
 
@@ -146,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
     public void showNotification(View v) {
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("This is your title")
-                .setContentText("This is where fuel price will be")
+                .setContentText("2323")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setSmallIcon(R.drawable.ic_money)
                 .build();
         notificationManager.notify(1,notification);
     }
