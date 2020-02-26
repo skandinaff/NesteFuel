@@ -3,32 +3,20 @@ package com.example.testapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.example.testapp.NotApp.CHANNEL_ID;
 
@@ -36,12 +24,13 @@ import static com.example.testapp.NotApp.CHANNEL_ID;
 public class MainActivity extends AppCompatActivity {
     private TextView textView, textView2;
     private Button button, button2;
-
+    private static final String TAG = "MainActivity";
     private NotificationManagerCompat notificationManager;
 
-    private List<String> DataToDisplay;
+    public static List<String> DataToDisplay;
+    public static List<String> DataBackup = null;
 
-    ProgressDialog progressDialog;
+    //ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +55,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        jobBegin();
 
+
+    }
+
+    public void jobBegin() {
+        ComponentName componentName = new ComponentName(this, PriceUpdateService.class);
+        JobInfo info = new JobInfo.Builder(123,componentName)
+                .setPersisted(true)
+                .setPeriodic(15*60*1000)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        int resultcode = scheduler.schedule(info);
+        if(resultcode==JobScheduler.RESULT_SUCCESS){
+            Log.d(TAG, "Job scheduled");
+        } else {
+            Log.d(TAG, "Job schedulling failed");
+        }
+    }
+
+    public void jobCancel(View view) {
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(123);
+        Log.d(TAG,"Job cancelled");
     }
 
     private class Content extends AsyncTask<Void,Void,Void> {
@@ -75,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog=new ProgressDialog(MainActivity.this);
+            //progressDialog=new ProgressDialog(MainActivity.this);
             //progressDialog.show();
         }
         @Override
@@ -88,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids){
-
-            DataToDisplay = GetDataFromNeste();
+             //DataToDisplay = GetDataFromNeste();
 
             return null;
 
@@ -99,38 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-    public static List<String> GetDataFromNeste() {
 
-        String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-        //String url = "http://192.168.2.222/neste/cenas.html"; // Or replace it with your locally hosted version
-        String title, name, price, place;
-        List<String> FuelData = new ArrayList<String>();
-
-        try {
-            Document doc = Jsoup.connect(url).get();
-            title = doc.title();
-
-            Elements node = doc.getElementsByClass("even");
-            //price = table.text().toString();
-            Element row = node.select("tr").get(3); // Third row is Diesel price
-
-            Elements cols = row.select("td");
-
-            name = cols.get(0).text().toString();
-            price = cols.get(1).text().toString();
-            place = cols.get(2).text().toString();
-
-            FuelData.add(title);
-            FuelData.add(name);
-            FuelData.add(price);
-            FuelData.add(place);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return FuelData;
-    }
 
 
 
@@ -142,6 +123,18 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_money)
                 .build();
         notificationManager.notify(1,notification);
+    }
+
+    public boolean DataMatches(){
+
+        if(DataBackup != DataToDisplay){
+            DataBackup = DataToDisplay;
+            textView.setText(DataToDisplay.get(0));
+            textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
+            return false;
+        }else{
+            return true;
+        }
     }
 
 }
