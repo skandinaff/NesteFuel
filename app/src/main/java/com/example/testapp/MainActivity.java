@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private NotificationManagerCompat notificationManager;
 
+    private List<String> DataToDisplay;
+
     ProgressDialog progressDialog;
 
     @Override
@@ -68,20 +70,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Content extends AsyncTask<Void,Void,Void> {
-        List<String> DataToDisplay;
+
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog=new ProgressDialog(MainActivity.this);
-            progressDialog.show();
+            //progressDialog.show();
         }
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             textView.setText(DataToDisplay.get(0));
             textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
         }
 
         @Override
@@ -99,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static List<String> GetDataFromNeste() {
 
-        //String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-        String url = "http://192.168.2.222/neste/cenas.html";
+        String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+        //String url = "http://192.168.2.222/neste/cenas.html"; // Or replace it with your locally hosted version
         String title, name, price, place;
         List<String> FuelData = new ArrayList<String>();
 
@@ -134,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void showNotification(View v) {
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setContentTitle("This is your title")
-                .setContentText("2323")
+                .setContentTitle("The best price for you sir")
+                .setContentText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_money)
                 .build();

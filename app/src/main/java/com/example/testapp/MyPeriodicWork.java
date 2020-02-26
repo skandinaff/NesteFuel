@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.example.testapp.MainActivity.GetDataFromNeste;
 
+// At the moment this class does nothing
 
 public class MyPeriodicWork extends Worker {
 

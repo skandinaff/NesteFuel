@@ -19,7 +19,7 @@ public class NotApp extends Application {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Example Channel",
+                    "Fuel Channel",
                     NotificationManager.IMPORTANCE_HIGH
             );
 
