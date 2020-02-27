@@ -1,11 +1,6 @@
 package com.example.testapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
-
-import android.app.Notification;
 import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -16,17 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.testapp.NotApp.CHANNEL_ID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,16 +21,11 @@ public class MainActivity extends AppCompatActivity {
 
     //private NotificationManagerCompat notificationManager;
 
-    public static List<String> DataToDisplay;
+    private static List<String> DataToDisplay;
     public static List<String> DataBackup = null;
     public static boolean NewDataArrivedFlag = false;
 
-    public enum SOURCE {
-        LOCAL_PAPS,
-        GLOBAL
-    }
-    public static SOURCE mySource = SOURCE.LOCAL_PAPS;
-
+    //GetDataFromServer getDataFromServer = new GetDataFromServer();
     ProgressDialog progressDialog;
 
     @Override
@@ -62,10 +42,13 @@ public class MainActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 Content content = new Content();
                 content.execute();
             }
         });
+
+
 
         jobBegin();
 
@@ -98,9 +81,28 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"Job cancelled");
     }
 
+    public void CheckPriceNow(View view) {
+        //DataToDisplay = getDataFromServer.get();
+        Log.d(TAG, "You've pressed a Button button");
+
+        GetDataFromServer getDataFromServer = new GetDataFromServer();
+        //getDataFromServer.fetch();
+
+
+        DataToDisplay = getDataFromServer.get();
+        if(DataToDisplay != null) {
+            textView.setText(DataToDisplay.get(0));
+            textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
+        }
+
+
+    }
+
     private class Content extends AsyncTask<Void,Void,Void> {
         //TODO Decide wheter this class is necessary for updating the TextViews
         // EVERYTHING that happens here is onClick
+
+
 
         @Override
         protected void onPreExecute() {
@@ -114,26 +116,27 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
-            if(DataToDisplay != null) {
-                textView.setText(DataToDisplay.get(0));
-                textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
-            }
                 //progressDialog.dismiss();
         }
 
         @Override
         protected Void doInBackground(Void... voids){
-            GetDataFromNesteNow();
-             //DataToDisplay = GetDataFromNeste();
+
+            GetDataFromServer getDataFromServer = new GetDataFromServer();
+            getDataFromServer.fetch();
+            DataToDisplay = getDataFromServer.get();
 
 
 
+/*
+            if(DataToDisplay != null) {
+                textView.setText(DataToDisplay.get(0));
+                textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
+            }
             if (NewDataArrivedFlag && DataToDisplay != DataBackup) {
-                //showNotification();
                 NewDataArrivedFlag=false;
             }
-
+*/
             return null;
 
         }
@@ -152,58 +155,8 @@ public class MainActivity extends AppCompatActivity {
         notificationManager.notify(1,notification);
     }
 */
-    public boolean DataReady(){ // ???
-
-        if(DataBackup != null){
-            textView.setText(DataToDisplay.get(0));
-            textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    public void GetDataFromNesteNow(){
-        String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-        switch (mySource){
-            case GLOBAL:
-                url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-                break;
-            case LOCAL_PAPS:
-                url = "http://192.168.2.222/neste/cenas.html";
-                break;
-        }
-        String title, name, price, place;
-        List<String> FuelData = new ArrayList<String>();
-
-        try {
-            Document doc = Jsoup.connect(url).get();
-            title = doc.title();
-
-            Elements node = doc.getElementsByClass("even");
-            //price = table.text().toString();
-            Element row = node.select("tr").get(3); // Third row is Diesel price
-
-            Elements cols = row.select("td");
-
-            name = cols.get(0).text().toString();
-            price = cols.get(1).text().toString();
-            place = cols.get(2).text().toString();
-
-            FuelData.add(title);
-            FuelData.add(name);
-            FuelData.add(price);
-            FuelData.add(place);
-
-            //TODO write comparison with old data to see if anything changed!
 
 
-            DataToDisplay = FuelData;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
 

@@ -2,6 +2,7 @@ package com.example.testapp;
 
 import android.app.Notification;
 import android.app.job.JobParameters;
+import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.util.Log;
 
@@ -20,11 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.example.testapp.MainActivity.DataBackup;
-import static com.example.testapp.MainActivity.DataToDisplay;
 import static com.example.testapp.MainActivity.NewDataArrivedFlag;
-import static com.example.testapp.MainActivity.SOURCE.GLOBAL;
-import static com.example.testapp.MainActivity.SOURCE.LOCAL_PAPS;
-import static com.example.testapp.MainActivity.mySource;
 import static com.example.testapp.NotApp.CHANNEL_ID;
 
 
@@ -32,6 +29,9 @@ public class PriceUpdateService extends JobService {
     public static final String TAG = "PriceUpdateService";
     private boolean jobCancelled = false;
     private NotificationManagerCompat notificationManager;
+    private List<String> DataToDisplay;
+
+
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -44,7 +44,7 @@ public class PriceUpdateService extends JobService {
         return true;
     }
 
-    public void showNotification() { // This function is only called from button onClick as of now.
+    public void showNotification() {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("The best price for you sir")
                 .setContentText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3))
@@ -55,61 +55,28 @@ public class PriceUpdateService extends JobService {
     }
 
     public void GetDataFromNeste(final JobParameters params) {
+
+        final GetDataFromServer getDataFromServer = new GetDataFromServer();
+
         new Thread(new Runnable(){
             @Override
             public void run() {
-                String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-                switch (mySource){
-                    case GLOBAL:
-                        url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-                        break;
-                    case LOCAL_PAPS:
-                        url = "http://192.168.2.222/neste/cenas.html";
-                        break;
-                }
-                String title, name, price, place;
-                List<String> FuelData = new ArrayList<String>();
 
-                try {
-                    Document doc = Jsoup.connect(url).get();
-                    title = doc.title();
+                getDataFromServer.fetch();
 
-                    Elements node = doc.getElementsByClass("even");
-                    //price = table.text().toString();
-                    Element row = node.select("tr").get(3); // Third row is Diesel price
+                DataToDisplay = getDataFromServer.get();
 
-                    Elements cols = row.select("td");
+                Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
 
-                    name = cols.get(0).text().toString();
-                    price = cols.get(1).text().toString();
-                    place = cols.get(2).text().toString();
-
-                    FuelData.add(title);
-                    FuelData.add(name);
-                    FuelData.add(price);
-                    FuelData.add(place);
-
-                    //TODO write comparison with old data to see if anything changed!
-
-                    DataToDisplay = FuelData;
-
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                if (DataToDisplay != DataBackup){
-                    showNotification();
-                }
-
-                Log.d(TAG, "Here's what we've fetched: " + FuelData.get(0) + "   " + FuelData.get(1) + "   " + FuelData.get(2) + "   " + FuelData.get(3));
+                showNotification();
                 NewDataArrivedFlag=true;
             }
         }).start();
 
 
     }
+
+
 
     @Override
     public boolean onStopJob(JobParameters params) {
