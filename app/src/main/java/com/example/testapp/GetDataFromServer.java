@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class GetDataFromServer {
 
     public static List<String> DataToDisplay;
 
-    private enum SOURCE {
-        LOCAL_PAPS,
-        GLOBAL
-    }
-    private SOURCE mySource = SOURCE.LOCAL_PAPS;
+    final int GLOBAL = 0;
+    final int LOCAL_PAPS = 1;
+    final int LOCAL_HOME = 2;
+
 
 
 
@@ -29,21 +29,17 @@ public class GetDataFromServer {
 
     public void fetch(){
 
-                String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-                switch (mySource) {
-                    case GLOBAL:
-                        url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-                        break;
-                    case LOCAL_PAPS:
-                        url = "http://192.168.2.222/neste/cenas.html";
-                        break;
-                }
+        List<String> urls = new ArrayList<String>();
+        urls.add("https://www.neste.lv/lv/content/degvielas-cenas/");
+        urls.add("http://192.168.2.222/neste/cenas.html");
+        urls.add("http://192.168.123.17/neste/cenas.html");
+
 
                 String title, name, price, place;
                 List<String> FuelData = new ArrayList<String>();
 
                 try {
-                    Document doc = Jsoup.connect(url).get();
+                    Document doc = Jsoup.connect(urls.get(LOCAL_HOME)).get();
                     title = doc.title();
 
                     Elements node = doc.getElementsByClass("even");
