@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     //private NotificationManagerCompat notificationManager;
 
     private static List<String> DataToDisplay;
-    public static List<String> DataBackup = null;
-    public static boolean NewDataArrivedFlag = false;
+
+
 
     //GetDataFromServer getDataFromServer = new GetDataFromServer();
     ProgressDialog progressDialog;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
         button = (Button) findViewById(R.id.button);
-        //button2 = (Button) findViewById(R.id.button2);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         ComponentName componentName = new ComponentName(this, PriceUpdateService.class);
         JobInfo info = new JobInfo.Builder(123,componentName)
                 .setPersisted(true)
-                .setPeriodic(15*60*1000)
+                .setPeriodic(1*60*1000)
                 .build();
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"Job cancelled");
     }
 
-    public void CheckPriceNow(View view) {
+    public void CheckPriceNow(View view) { // Now we can update the UI here, but can't fetch the changes form server
         //DataToDisplay = getDataFromServer.get();
         Log.d(TAG, "You've pressed a Button button");
 

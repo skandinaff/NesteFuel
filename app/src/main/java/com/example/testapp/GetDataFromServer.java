@@ -61,9 +61,8 @@ public class GetDataFromServer {
                     FuelData.add(price);
                     FuelData.add(place);
 
-                    //TODO write comparison with old data to see if anything changed!
-
                     DataToDisplay = FuelData;
+
 
                 } catch (
                         IOException e) {

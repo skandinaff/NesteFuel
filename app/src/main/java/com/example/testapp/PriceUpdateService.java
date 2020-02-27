@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.testapp.MainActivity.DataBackup;
-import static com.example.testapp.MainActivity.NewDataArrivedFlag;
+
 import static com.example.testapp.NotApp.CHANNEL_ID;
 
 
@@ -30,6 +29,7 @@ public class PriceUpdateService extends JobService {
     private boolean jobCancelled = false;
     private NotificationManagerCompat notificationManager;
     private List<String> DataToDisplay;
+    private List<String> DataPrevious;
 
 
 
@@ -66,10 +66,15 @@ public class PriceUpdateService extends JobService {
 
                 DataToDisplay = getDataFromServer.get();
 
+
                 Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
 
-                showNotification();
-                NewDataArrivedFlag=true;
+                if(DataToDisplay != DataPrevious){
+                    showNotification();
+                }
+
+                DataPrevious = DataToDisplay;
+
             }
         }).start();
 
