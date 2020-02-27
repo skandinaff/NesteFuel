@@ -31,10 +31,10 @@ import static com.example.testapp.NotApp.CHANNEL_ID;
 
 public class MainActivity extends AppCompatActivity {
     private TextView textView, textView2;
-    private Button button, button2;
+    private Button button;
     private static final String TAG = "MainActivity";
 
-    private NotificationManagerCompat notificationManager;
+    //private NotificationManagerCompat notificationManager;
 
     public static List<String> DataToDisplay;
     public static List<String> DataBackup = null;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        notificationManager = NotificationManagerCompat.from(this);
+        //notificationManager = NotificationManagerCompat.from(this);
 
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
@@ -129,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            if (NewDataArrivedFlag) {
-                showNotification();
+            if (NewDataArrivedFlag && DataToDisplay != DataBackup) {
+                //showNotification();
                 NewDataArrivedFlag=false;
             }
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
+/*
     public void showNotification() { // This function is only called from button onClick as of now.
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("The best price for you sir")
@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         notificationManager.notify(1,notification);
     }
-
-    public boolean DataReady(){
+*/
+    public boolean DataReady(){ // ???
 
         if(DataBackup != null){
             textView.setText(DataToDisplay.get(0));
