@@ -10,10 +10,17 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.testapp.MainActivity.DataToDisplay;
+import static com.example.testapp.MainActivity.NewDataArrivedFlag;
+import static com.example.testapp.MainActivity.SOURCE.GLOBAL;
+import static com.example.testapp.MainActivity.SOURCE.LOCAL_PAPS;
+import static com.example.testapp.MainActivity.mySource;
+
 
 public class PriceUpdateService extends JobService {
     public static final String TAG = "PriceUpdateService";
@@ -21,16 +28,26 @@ public class PriceUpdateService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job Started");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        String format = simpleDateFormat.format(new Date());
+        Log.d("MainActivity", "Current Timestamp: " + format);
         GetDataFromNeste(params);
         return true;
     }
 
-    public void GetDataFromNeste(final JobParameters params) {
+    public static void GetDataFromNeste(final JobParameters params) {
         new Thread(new Runnable(){
             @Override
             public void run() {
-                //String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
-                String url = "http://192.168.2.222/neste/cenas.html"; // Or replace it with your locally hosted version
+                String url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+                switch (mySource){
+                    case GLOBAL:
+                        url = "https://www.neste.lv/lv/content/degvielas-cenas/";
+                        break;
+                    case LOCAL_PAPS:
+                        url = "http://192.168.2.222/neste/cenas.html";
+                        break;
+                }
                 String title, name, price, place;
                 List<String> FuelData = new ArrayList<String>();
 
@@ -55,19 +72,15 @@ public class PriceUpdateService extends JobService {
 
                     //TODO write comparison with old data to see if anything changed!
 
-
                     DataToDisplay = FuelData;
+
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(jobCancelled){
-                    return;
-                }
-
-                //return FuelData;
                 Log.d(TAG, "Here's what we've fetched: " + FuelData.get(0) + "   " + FuelData.get(1) + "   " + FuelData.get(2) + "   " + FuelData.get(3));
-                jobFinished(params,false);
+                NewDataArrivedFlag=true;
             }
         }).start();
 
