@@ -9,18 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class GetDataFromServer {
 
-    public static List<String> DataToDisplay;
+    private static List<String> DataToDisplay;
 
     final int GLOBAL = 0;
     final int LOCAL_PAPS = 1;
     final int LOCAL_HOME = 2;
-
-
-
 
     public List<String> get(){
 
@@ -44,7 +39,7 @@ public class GetDataFromServer {
 
                     Elements node = doc.getElementsByClass("even");
                     //price = table.text().toString();
-                    Element row = node.select("tr").get(3); // Third row is Diesel price
+                    Element row = node.select("tr").get(2); // Third row is Diesel price //TODO make a constant to select fuel type
 
                     Elements cols = row.select("td");
 
@@ -56,9 +51,9 @@ public class GetDataFromServer {
                     FuelData.add(name);
                     FuelData.add(price);
                     FuelData.add(place);
-
                     DataToDisplay = FuelData;
 
+                    //TODO implement saving last FuelData into the SharedPreferences or database
 
                 } catch (
                         IOException e) {
