@@ -34,7 +34,7 @@ public class GetDataFromServer {
                 List<String> FuelData = new ArrayList<String>();
 
                 try {
-                    Document doc = Jsoup.connect(urls.get(LOCAL_PAPS)).get();
+                    Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
                     title = doc.title();
 
                     Elements node = doc.getElementsByClass("even");

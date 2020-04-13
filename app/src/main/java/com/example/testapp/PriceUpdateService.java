@@ -1,9 +1,11 @@
 package com.example.testapp;
 
 import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.job.JobParameters;;
 import android.app.job.JobService;
 import android.util.Log;
+import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import java.text.SimpleDateFormat;
@@ -36,8 +38,11 @@ public class PriceUpdateService extends JobService {
                 .setContentText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_money)
+
+
                 .build();
         notificationManager.notify(1,notification);
+
     }
 
     public void logTimestamp(){
@@ -62,8 +67,7 @@ public class PriceUpdateService extends JobService {
                 Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
                 logTimestamp();
 
-                if (DataToDisplay.equals(DataPrevious)) {
-                } else {
+                if (!(DataToDisplay.equals(DataPrevious))) {
                     showNotification();
                 }
 

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private class Content extends AsyncTask<Void,Void,Void> {
-        //TODO Decide wheter this class is necessary for updating the TextViews
+        //TODO Decide whether this class is necessary for updating the TextViews
         // EVERYTHING that happens here is onClick
 
 
