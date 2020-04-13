@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private static final String TAG = "MainActivity";
     private static List<String> DataToDisplay;
-    public static List<String> DataPrevious;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 
-import static com.example.testapp.MainActivity.DataPrevious;
+//import static com.example.testapp.MainActivity.DataPrevious;
 import static com.example.testapp.NotApp.CHANNEL_ID;
 
 public class PriceUpdateService extends JobService {
@@ -19,6 +19,7 @@ public class PriceUpdateService extends JobService {
     private boolean jobCancelled = false;
     private NotificationManagerCompat notificationManager;
     private List<String> DataToDisplay;
+    private List<String> DataPrevious;
 
     @Override
     public boolean onStartJob(JobParameters params) {
