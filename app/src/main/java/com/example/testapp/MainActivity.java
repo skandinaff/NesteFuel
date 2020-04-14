@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import java.util.List;
 
@@ -18,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private static final String TAG = "MainActivity";
     private static List<String> DataToDisplay;
+    public static String FuelType = "Diesel";
+
+    RadioGroup radioGroup;
+    RadioButton radioButton;
 
 
     @Override
@@ -37,8 +43,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        radioGroup = findViewById(R.id.radioGroup);
+
         jobBegin();
+
+
     }
+
+
 
     public void jobBegin() { //The job being was unassigned from button to run it automatically.
         ComponentName componentName = new ComponentName(this, PriceUpdateService.class);
@@ -75,6 +87,17 @@ public class MainActivity extends AppCompatActivity {
             textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
         }
     }
+
+
+
+    public void checkRadioButton(View view) {
+        int radioId = radioGroup.getCheckedRadioButtonId();
+        radioButton = findViewById(radioId);
+
+        Log.d(TAG,"RadioButton Text is: " + radioButton.getText() );
+        FuelType = radioButton.getText().toString();
+    }
+
     private class Content extends AsyncTask<Void,Void,Void> {
         //TODO Decide whether this class is necessary for updating the TextViews
         // EVERYTHING that happens here is onClick
@@ -96,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids){
 
             GetDataFromServer getDataFromServer = new GetDataFromServer();
-            getDataFromServer.fetch();
-            DataToDisplay = getDataFromServer.get();
+            getDataFromServer.fetch(FuelType);
+            //DataToDisplay = getDataFromServer.get();
 
             return null;
         }

@@ -16,19 +16,35 @@ public class GetDataFromServer {
     final int GLOBAL = 0;
     final int LOCAL_PAPS = 1;
     final int LOCAL_HOME = 2;
+    private int xFUELTYPE = 3;
+
 
     public List<String> get(){
 
         return this.DataToDisplay;
     }
 
-    public void fetch(){
+    public void fetch(@org.jetbrains.annotations.NotNull String FuelType){
 
         List<String> urls = new ArrayList<String>();
         urls.add("https://www.neste.lv/lv/content/degvielas-cenas/");
         urls.add("http://192.168.2.222/neste/cenas.html");
         urls.add("http://192.168.123.17/neste/cenas.html");
 
+        switch (FuelType) {
+            case "Petrol 95":
+                xFUELTYPE = 1;
+                break;
+            case "Petrol 98":
+                xFUELTYPE = 2;
+                break;
+            case "Diesel":
+                xFUELTYPE = 3;
+                break;
+            case "Diesel PRO":
+                xFUELTYPE = 4;
+                break;
+        }
 
                 String title, name, price, place;
                 List<String> FuelData = new ArrayList<String>();
@@ -39,7 +55,8 @@ public class GetDataFromServer {
 
                     Elements node = doc.getElementsByClass("even");
                     //price = table.text().toString();
-                    Element row = node.select("tr").get(2); // Third row is Diesel price //TODO make a constant to select fuel type
+
+                    Element row = node.select("tr").get(xFUELTYPE);
 
                     Elements cols = row.select("td");
 

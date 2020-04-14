@@ -15,6 +15,7 @@ import java.util.List;
 
 //import static com.example.testapp.MainActivity.DataPrevious;
 import static com.example.testapp.NotApp.CHANNEL_ID;
+import static com.example.testapp.MainActivity.FuelType;
 
 public class PriceUpdateService extends JobService {
     public static final String TAG = "PriceUpdateService";
@@ -60,14 +61,16 @@ public class PriceUpdateService extends JobService {
             public void run() {
 
 
-                getDataFromServer.fetch();
+                getDataFromServer.fetch(FuelType);
 
                 DataToDisplay = getDataFromServer.get();
 
                 Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
                 logTimestamp();
 
-                if (!(DataToDisplay.equals(DataPrevious))) {
+                if (!DataToDisplay.equals(DataPrevious)) { // TODO consider refactoring this.
+
+                }else{
                     showNotification();
                 }
 
