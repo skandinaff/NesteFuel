@@ -28,6 +28,7 @@ public class PriceUpdateService extends JobService {
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job Started");
         logTimestamp();
+
         notificationManager = NotificationManagerCompat.from(this);
         GetDataFromNeste(params);
         return true;
@@ -39,8 +40,6 @@ public class PriceUpdateService extends JobService {
                 .setContentText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_money)
-
-
                 .build();
         notificationManager.notify(1,notification);
 
@@ -68,7 +67,7 @@ public class PriceUpdateService extends JobService {
                 Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
                 logTimestamp();
 
-                if (!DataToDisplay.equals(DataPrevious)) { // TODO consider refactoring this.
+                if (DataToDisplay.equals(DataPrevious)) { // TODO consider refactoring this. ALSO DataPrevious = Null if we checked price with button.
 
                 }else{
                     showNotification();
@@ -87,6 +86,10 @@ public class PriceUpdateService extends JobService {
         Log.d(TAG, "Job cancelled");
         jobCancelled = true;
         return true;
+    }
+
+    public void setDataPrevious(List<String> DataPreviousFromButton){
+        DataPrevious = DataPreviousFromButton;
     }
 
 }

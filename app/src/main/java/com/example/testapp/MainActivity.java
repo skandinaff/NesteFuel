@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     public void jobBegin() { //The job being was unassigned from button to run it automatically.
         ComponentName componentName = new ComponentName(this, PriceUpdateService.class);
         JobInfo info = new JobInfo.Builder(123,componentName)
@@ -80,8 +85,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "You've pressed a Button button");
 
         GetDataFromServer getDataFromServer = new GetDataFromServer();
-
         DataToDisplay = getDataFromServer.get();
+
+        PriceUpdateService priceUpdateService = new PriceUpdateService();
+        priceUpdateService.setDataPrevious(DataToDisplay);
+
         if(DataToDisplay != null) {
             textView.setText(DataToDisplay.get(0));
             textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
@@ -120,10 +128,12 @@ public class MainActivity extends AppCompatActivity {
 
             GetDataFromServer getDataFromServer = new GetDataFromServer();
             getDataFromServer.fetch(FuelType);
+
             //DataToDisplay = getDataFromServer.get();
 
             return null;
         }
     }
+
 }
 

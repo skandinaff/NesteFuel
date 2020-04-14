@@ -16,9 +16,10 @@
         android:text="Fetch Price Now"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.216" />
+        app:layout_constraintVertical_bias="0.409" />
 
     <Button
         android:id="@+id/button2"
@@ -33,17 +34,45 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.53" />
 
-    <TextView
-        android:id="@+id/textView2"
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Press Check price, then Show price."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintVertical_bias="0.217">
+
+        <RadioButton
+            android:id="@+id/radio_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="checkRadioButton"
+            android:text="Petrol 95" />
+
+        <RadioButton
+            android:id="@+id/radio_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="checkRadioButton"
+            android:text="Petrol 98" />
+
+        <RadioButton
+            android:id="@+id/radio_thee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:onClick="checkRadioButton"
+            android:text="Diesel" />
+
+        <RadioButton
+            android:id="@+id/radio_four"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="checkRadioButton"
+            android:text="Diesel PRO" />
+    </RadioGroup>
 
     <TextView
         android:id="@+id/textView"
@@ -57,39 +86,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.127" />
 
-    <RadioGroup
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/radioGroup"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        android:text="Select fuel type, press Check price, then Show price."
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button">
-        <RadioButton
-            android:id="@+id/radio_one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Petrol 95"
-            android:onClick="checkRadioButton"/>
-        <RadioButton
-            android:id="@+id/radio_two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Petrol 98"
-            android:onClick="checkRadioButton"/>
-        <RadioButton
-            android:id="@+id/radio_thee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Diesel"
-            android:onClick="checkRadioButton"
-            android:checked="true"/>
-        <RadioButton
-            android:id="@+id/radio_four"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Diesel PRO"
-            android:onClick="checkRadioButton"/>
-    </RadioGroup>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.612" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
