@@ -4,6 +4,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.job.JobParameters;;
 import android.app.job.JobService;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.content.Intent;
 import androidx.core.app.NotificationCompat;
@@ -23,6 +24,7 @@ public class PriceUpdateService extends JobService {
     private NotificationManagerCompat notificationManager;
     private List<String> DataToDisplay;
     private List<String> DataPrevious;
+
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -53,7 +55,7 @@ public class PriceUpdateService extends JobService {
 
     public void GetDataFromNeste(final JobParameters params) {
 
-        final GetDataFromServer getDataFromServer = new GetDataFromServer();
+        final GetDataFromServer getDataFromServer = new GetDataFromServer(null, null);
 
         new Thread(new Runnable(){
             @Override

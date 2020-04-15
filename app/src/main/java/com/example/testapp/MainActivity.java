@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,10 +30,18 @@ public class MainActivity extends AppCompatActivity {
     RadioButton radioButton;
 
 
+    public SQLiteDatabase mDatabase;
+
+    FuelDBHelper dbHelper = new FuelDBHelper(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        mDatabase = dbHelper.getWritableDatabase();
+
 
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
@@ -84,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         //This happens onClick and updates the UI, but fetch doesn't work here
         Log.d(TAG, "You've pressed a Button button");
 
-        GetDataFromServer getDataFromServer = new GetDataFromServer();
+        GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
         DataToDisplay = getDataFromServer.get();
 
         PriceUpdateService priceUpdateService = new PriceUpdateService();
@@ -126,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids){
 
-            GetDataFromServer getDataFromServer = new GetDataFromServer();
+            GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase); // This is second time GetDataFromServer is initialised. WHY WOULD YOU DO THAT !
+
             getDataFromServer.fetch(FuelType);
 
             //DataToDisplay = getDataFromServer.get();

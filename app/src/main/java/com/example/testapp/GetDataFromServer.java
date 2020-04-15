@@ -1,30 +1,52 @@
 package com.example.testapp;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.testapp.FuelData.*;
 
 public class GetDataFromServer {
 
+
+    private final FuelDBHelper dbHelper;
+    private final SQLiteDatabase mDataBase;
+    private SQLiteDatabase xmDataBase;
+
+    public GetDataFromServer(FuelDBHelper dbHelper, SQLiteDatabase mDataBase){
+
+        this.dbHelper = dbHelper;
+        this.mDataBase = mDataBase;
+    }
+
     private static List<String> DataToDisplay;
 
-    final int GLOBAL = 0;
-    final int LOCAL_PAPS = 1;
-    final int LOCAL_HOME = 2;
-    private int xFUELTYPE = 3;
+    static final int GLOBAL = 0;
+    static final int LOCAL_PAPS = 1;
+    static final int LOCAL_HOME = 2;
+    static private int xFUELTYPE = 3;
 
+    //FuelDBHelper dbHelper = new FuelDBHelper(this);
 
     public List<String> get(){
 
         return this.DataToDisplay;
     }
 
+
     public void fetch(@org.jetbrains.annotations.NotNull String FuelType){
+
+
 
         List<String> urls = new ArrayList<String>();
         urls.add("https://www.neste.lv/lv/content/degvielas-cenas/");
@@ -47,6 +69,7 @@ public class GetDataFromServer {
         }
 
                 String title, name, price, place;
+                float fprice;
                 List<String> FuelData = new ArrayList<String>();
 
                 try {
@@ -61,8 +84,23 @@ public class GetDataFromServer {
                     Elements cols = row.select("td");
 
                     name = cols.get(0).text().toString();
-                    price = cols.get(1).text().toString();
+                    price = cols.get(1).text().toString(); // Price in our case is actually FLOAT
                     place = cols.get(2).text().toString();
+                    fprice = Float.parseFloat(price);
+                    /*
+                    DecimalFormat df = new DecimalFormat("#.000");
+                    df.format(fprice);
+*/
+
+                    //In principle, it seems that this would be a place where to add fuel data to DB
+
+                    ContentValues cv = new ContentValues();
+                    cv.put(FuelEntry.COLUMN_NAME, name);  // Not sure if we can access FuelEntry that way.
+                    cv.put(FuelEntry.COLUMN_PRICE, fprice);
+                    cv.put(FuelEntry.COLUMN_PLACE, place);
+
+                    mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
+
 
                     FuelData.add(title);
                     FuelData.add(name);
