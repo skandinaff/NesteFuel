@@ -14,17 +14,21 @@ import java.util.Date;
 import java.util.List;
 
 
-//import static com.example.testapp.MainActivity.DataPrevious;
+
+import static com.example.testapp.MainActivity.mDatabase;
 import static com.example.testapp.NotApp.CHANNEL_ID;
 import static com.example.testapp.MainActivity.FuelType;
 
 public class PriceUpdateService extends JobService {
     public static final String TAG = "PriceUpdateService";
+    private static List<String> DataPrevious;
     private boolean jobCancelled = false;
     private NotificationManagerCompat notificationManager;
     private List<String> DataToDisplay;
-    private List<String> DataPrevious;
 
+    FuelDBHelper dbHelper = new FuelDBHelper(this);
+
+    final GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -55,12 +59,9 @@ public class PriceUpdateService extends JobService {
 
     public void GetDataFromNeste(final JobParameters params) {
 
-        final GetDataFromServer getDataFromServer = new GetDataFromServer(null, null);
-
         new Thread(new Runnable(){
             @Override
             public void run() {
-
 
                 getDataFromServer.fetch(FuelType);
 
@@ -90,7 +91,7 @@ public class PriceUpdateService extends JobService {
         return true;
     }
 
-    public void setDataPrevious(List<String> DataPreviousFromButton){
+    public static void setDataPrevious(List<String> DataPreviousFromButton){
         DataPrevious = DataPreviousFromButton;
     }
 

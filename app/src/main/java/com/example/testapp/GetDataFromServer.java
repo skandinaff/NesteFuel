@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.testapp.FuelData.*;
 
-public class GetDataFromServer {
+public class GetDataFromServer  {
 
 
     private final FuelDBHelper dbHelper;
@@ -91,11 +91,8 @@ public class GetDataFromServer {
                     DecimalFormat df = new DecimalFormat("#.000");
                     df.format(fprice);
 */
-
-                    //In principle, it seems that this would be a place where to add fuel data to DB
-
                     ContentValues cv = new ContentValues();
-                    cv.put(FuelEntry.COLUMN_NAME, name);  // Not sure if we can access FuelEntry that way.
+                    cv.put(FuelEntry.COLUMN_NAME, name);
                     cv.put(FuelEntry.COLUMN_PRICE, fprice);
                     cv.put(FuelEntry.COLUMN_PLACE, place);
 
@@ -107,8 +104,6 @@ public class GetDataFromServer {
                     FuelData.add(price);
                     FuelData.add(place);
                     DataToDisplay = FuelData;
-
-                    //TODO implement saving last FuelData into the SharedPreferences or database
 
                 } catch (
                         IOException e) {

@@ -26,13 +26,18 @@ public class MainActivity extends AppCompatActivity {
     private static List<String> DataToDisplay;
     public static String FuelType = "Diesel";
 
+    ProgressDialog progressDialog;
+
     RadioGroup radioGroup;
     RadioButton radioButton;
 
 
-    public SQLiteDatabase mDatabase;
+    public static SQLiteDatabase mDatabase;
 
     FuelDBHelper dbHelper = new FuelDBHelper(this);
+
+    PriceUpdateService priceUpdateService;
+    GetDataFromServer getDataFromServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         radioGroup = findViewById(R.id.radioGroup);
+
+        getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
+
+        priceUpdateService = new PriceUpdateService();
 
         jobBegin();
 
@@ -90,19 +99,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CheckPriceNow(View view) {
-        //This happens onClick and updates the UI, but fetch doesn't work here
+        //This happens onClick of SHOW PRICE button and updates the UI, but fetch doesn't work here
+        //UPDATE This is now depricated, button fetch shows price as well
+        //FOR NOW BUTTON DOES NOTHING!!
         Log.d(TAG, "You've pressed a Button button");
 
-        GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
-        DataToDisplay = getDataFromServer.get();
+        //GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
+        //DataToDisplay = getDataFromServer.get();
 
-        PriceUpdateService priceUpdateService = new PriceUpdateService();
-        priceUpdateService.setDataPrevious(DataToDisplay);
-
+        //PriceUpdateService priceUpdateService = new PriceUpdateService();
+        //priceUpdateService.setDataPrevious(DataToDisplay);
+/*
         if(DataToDisplay != null) {
             textView.setText(DataToDisplay.get(0));
             textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
+
         }
+        */
+
     }
 
 
@@ -116,30 +130,34 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class Content extends AsyncTask<Void,Void,Void> {
-        //TODO Decide whether this class is necessary for updating the TextViews
-        // EVERYTHING that happens here is onClick
-
-
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progressDialog = new ProgressDialog(MainActivity.this);
+            progressDialog.setMessage("Connecting to outer space...");
+            progressDialog.show();
 
         }
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+
+            if(DataToDisplay != null) {
+                textView.setText(DataToDisplay.get(0));
+                textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
+            }
+            priceUpdateService.setDataPrevious(DataToDisplay);
 
         }
 
         @Override
         protected Void doInBackground(Void... voids){
 
-            GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase); // This is second time GetDataFromServer is initialised. WHY WOULD YOU DO THAT !
-
             getDataFromServer.fetch(FuelType);
+            DataToDisplay = getDataFromServer.get();
 
-            //DataToDisplay = getDataFromServer.get();
 
             return null;
         }
