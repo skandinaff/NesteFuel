@@ -3,6 +3,7 @@ package com.example.testapp;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,9 +36,11 @@ public class GetDataFromServer  {
     static final int LOCAL_PAPS = 1;
     static final int LOCAL_HOME = 2;
     static final int LOCAL_HOME_LH = 3;
-    static private int xFUELTYPE = 3;
+    static private int xFUELTYPE;// = 3;
 
     //FuelDBHelper dbHelper = new FuelDBHelper(this);
+
+
 
     public List<String> get(){
 
@@ -62,11 +65,14 @@ public class GetDataFromServer  {
             case "Petrol 98":
                 xFUELTYPE = 2;
                 break;
-            case "Di esel":
+            case "Diesel":
                 xFUELTYPE = 3;
                 break;
             case "Diesel PRO":
                 xFUELTYPE = 4;
+                break;
+            default:
+                xFUELTYPE = 0;
                 break;
         }
 
@@ -74,43 +80,48 @@ public class GetDataFromServer  {
         float fprice;
         List<String> FuelData = new ArrayList<String>();
 
-        try {
-            Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
-            title = doc.title();
 
-            Elements node = doc.getElementsByClass("even");
-            //price = table.text().toString();
+            try {
+                Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
+                title = doc.title();
 
-            Element row = node.select("tr").get(xFUELTYPE);
+                Elements node = doc.getElementsByClass("even");
+                //price = table.text().toString();
 
-            Elements cols = row.select("td");
 
-            name = cols.get(0).text().toString();
-            price = cols.get(1).text().toString(); // Price in our case is actually FLOAT
-            place = cols.get(2).text().toString();
-            fprice = Float.parseFloat(price);
+                Element row = node.select("tr").get(xFUELTYPE);
+
+                Elements cols = row.select("td");
+
+                name = cols.get(0).text().toString();
+                price = cols.get(1).text().toString(); // Price in our case is actually FLOAT
+                place = cols.get(2).text().toString();
+                fprice = Float.parseFloat(price);
 
             /*DecimalFormat df = new DecimalFormat("#.000");
             df.format(fprice);*/
 
-            ContentValues cv = new ContentValues();
-            cv.put(FuelEntry.COLUMN_NAME, name);
-            cv.put(FuelEntry.COLUMN_PRICE, fprice);
-            cv.put(FuelEntry.COLUMN_PLACE, place);
+                ContentValues cv = new ContentValues();
+                cv.put(FuelEntry.COLUMN_NAME, name);
+                cv.put(FuelEntry.COLUMN_PRICE, fprice);
+                cv.put(FuelEntry.COLUMN_PLACE, place);
 
-            mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
+                mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
 
 
-            FuelData.add(title);
-            FuelData.add(name);
-            FuelData.add(price);
-            FuelData.add(place);
-            DataToDisplay = FuelData;
+                FuelData.add(title);
+                FuelData.add(name);
+                FuelData.add(price);
+                FuelData.add(place);
+                DataToDisplay = FuelData;
 
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
+
+
+            } catch (
+                    IOException e) {
+                e.printStackTrace();
+            }
+
 
 
     }

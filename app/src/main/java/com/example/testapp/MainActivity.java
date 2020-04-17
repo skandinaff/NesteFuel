@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private static final String TAG = "MainActivity";
     private static List<String> DataToDisplay;
-    public static String FuelType = "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
+    public static String FuelType ;//= "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
 
     ProgressDialog progressDialog;
 
@@ -57,7 +58,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Content content = new Content();
-                content.execute();
+
+                if(FuelType == null) {
+                    Toast.makeText(MainActivity.this, "Please, select Fuel Type First!",
+                            Toast.LENGTH_LONG).show();
+
+                }else {
+                    content.execute();
+                }
             }
         });
 
@@ -114,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
             progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setMessage("Connecting to outer space...");
             progressDialog.show();
