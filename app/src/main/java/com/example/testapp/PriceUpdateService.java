@@ -7,6 +7,8 @@ import android.app.job.JobService;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.content.Intent;
+import android.view.View;
+
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import java.text.SimpleDateFormat;
@@ -37,17 +39,30 @@ public class PriceUpdateService extends JobService {
 
         notificationManager = NotificationManagerCompat.from(this);
         GetDataFromNeste(params);
+
+
+
         return true;
     }
 
     public void showNotification() {
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        //Intent notifIntent = new Intent(String.valueOf(MainActivity.class));
+        PendingIntent contentIntent = PendingIntent.getActivity(this,0,
+                new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("The best price for you sir")
                 .setContentText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setSmallIcon(R.drawable.ic_money)
-                .build();
-        notificationManager.notify(1,notification);
+                .setSmallIcon(R.drawable.ic_local_gas_station_black_24dp)
+                .setContentIntent(contentIntent)
+
+                .setAutoCancel(true);
+                ;//.notification.build();
+
+
+        notificationManager.notify(1,notification.build());
 
     }
 

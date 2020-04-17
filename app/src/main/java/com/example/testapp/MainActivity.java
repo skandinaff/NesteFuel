@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private static final String TAG = "MainActivity";
     private static List<String> DataToDisplay;
-    public static String FuelType = "Diesel";
+    public static String FuelType = "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
 
     ProgressDialog progressDialog;
 
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
         priceUpdateService = new PriceUpdateService();
 
+
+
         jobBegin();
 
 
@@ -98,29 +101,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG,"Job cancelled");
     }
 
-    public void CheckPriceNow(View view) {
-        //This happens onClick of SHOW PRICE button and updates the UI, but fetch doesn't work here
-        //UPDATE This is now depricated, button fetch shows price as well
-        //FOR NOW BUTTON DOES NOTHING!!
-        Log.d(TAG, "You've pressed a Button button");
-
-        //GetDataFromServer getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
-        //DataToDisplay = getDataFromServer.get();
-
-        //PriceUpdateService priceUpdateService = new PriceUpdateService();
-        //priceUpdateService.setDataPrevious(DataToDisplay);
-/*
-        if(DataToDisplay != null) {
-            textView.setText(DataToDisplay.get(0));
-            textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
-
-        }
-        */
-
-    }
-
-
-
     public void checkRadioButton(View view) {
         int radioId = radioGroup.getCheckedRadioButtonId();
         radioButton = findViewById(radioId);
@@ -146,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(DataToDisplay != null) {
                 textView.setText(DataToDisplay.get(0));
-                textView2.setText(DataToDisplay.get(1) + " \n " + DataToDisplay.get(2) + " \n " + DataToDisplay.get(3));
+                textView2.setText(DataToDisplay.get(1) + " \n" + DataToDisplay.get(2) + " \n" + DataToDisplay.get(3));
             }
             priceUpdateService.setDataPrevious(DataToDisplay);
 

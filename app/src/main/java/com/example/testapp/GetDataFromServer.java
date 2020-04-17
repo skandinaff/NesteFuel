@@ -34,6 +34,7 @@ public class GetDataFromServer  {
     static final int GLOBAL = 0;
     static final int LOCAL_PAPS = 1;
     static final int LOCAL_HOME = 2;
+    static final int LOCAL_HOME_LH = 3;
     static private int xFUELTYPE = 3;
 
     //FuelDBHelper dbHelper = new FuelDBHelper(this);
@@ -52,6 +53,7 @@ public class GetDataFromServer  {
         urls.add("https://www.neste.lv/lv/content/degvielas-cenas/");
         urls.add("http://192.168.2.222/neste/cenas.html");
         urls.add("http://192.168.123.17/neste/cenas.html");
+        urls.add("http://localhost/neste/cenas.html");
 
         switch (FuelType) {
             case "Petrol 95":
@@ -60,7 +62,7 @@ public class GetDataFromServer  {
             case "Petrol 98":
                 xFUELTYPE = 2;
                 break;
-            case "Diesel":
+            case "Di esel":
                 xFUELTYPE = 3;
                 break;
             case "Diesel PRO":
@@ -68,47 +70,47 @@ public class GetDataFromServer  {
                 break;
         }
 
-                String title, name, price, place;
-                float fprice;
-                List<String> FuelData = new ArrayList<String>();
+        String title, name, price, place;
+        float fprice;
+        List<String> FuelData = new ArrayList<String>();
 
-                try {
-                    Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
-                    title = doc.title();
+        try {
+            Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
+            title = doc.title();
 
-                    Elements node = doc.getElementsByClass("even");
-                    //price = table.text().toString();
+            Elements node = doc.getElementsByClass("even");
+            //price = table.text().toString();
 
-                    Element row = node.select("tr").get(xFUELTYPE);
+            Element row = node.select("tr").get(xFUELTYPE);
 
-                    Elements cols = row.select("td");
+            Elements cols = row.select("td");
 
-                    name = cols.get(0).text().toString();
-                    price = cols.get(1).text().toString(); // Price in our case is actually FLOAT
-                    place = cols.get(2).text().toString();
-                    fprice = Float.parseFloat(price);
-                    /*
-                    DecimalFormat df = new DecimalFormat("#.000");
-                    df.format(fprice);
-*/
-                    ContentValues cv = new ContentValues();
-                    cv.put(FuelEntry.COLUMN_NAME, name);
-                    cv.put(FuelEntry.COLUMN_PRICE, fprice);
-                    cv.put(FuelEntry.COLUMN_PLACE, place);
+            name = cols.get(0).text().toString();
+            price = cols.get(1).text().toString(); // Price in our case is actually FLOAT
+            place = cols.get(2).text().toString();
+            fprice = Float.parseFloat(price);
 
-                    mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
+            /*DecimalFormat df = new DecimalFormat("#.000");
+            df.format(fprice);*/
+
+            ContentValues cv = new ContentValues();
+            cv.put(FuelEntry.COLUMN_NAME, name);
+            cv.put(FuelEntry.COLUMN_PRICE, fprice);
+            cv.put(FuelEntry.COLUMN_PLACE, place);
+
+            mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
 
 
-                    FuelData.add(title);
-                    FuelData.add(name);
-                    FuelData.add(price);
-                    FuelData.add(place);
-                    DataToDisplay = FuelData;
+            FuelData.add(title);
+            FuelData.add(name);
+            FuelData.add(price);
+            FuelData.add(place);
+            DataToDisplay = FuelData;
 
-                } catch (
-                        IOException e) {
-                    e.printStackTrace();
-                }
+        } catch (
+                IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
