@@ -51,7 +51,7 @@ public class FuelDBHelper extends SQLiteOpenHelper {
         FuelData.add(cursor.getString(1));
         FuelData.add(cursor.getString(2));
         FuelData.add(cursor.getString(3));
-        FuelData.add(cursor.getString(4));
+        //FuelData.add(cursor.getString(4));
 
         return FuelData;
 

@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import com.example.testapp.FuelData.*;
 
+import static com.example.testapp.MainActivity.DebugData;
+
 public class GetDataFromServer  {
 
 
@@ -30,7 +32,8 @@ public class GetDataFromServer  {
         this.mDataBase = mDataBase;
     }
 
-    private static List<String> DataToDisplay, DebugData;
+    private static List<String> DataToDisplay; //, DebugData;
+
 
     static final int GLOBAL = 0;
     static final int LOCAL_PAPS = 1;
@@ -46,12 +49,12 @@ public class GetDataFromServer  {
 
         return this.DataToDisplay;
     }
-
+/*
     public List<String> getDebugData(){
 
         return this.DebugData;
     }
-
+*/
     public void fetch(@org.jetbrains.annotations.NotNull String FuelType){
 
 

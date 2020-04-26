@@ -26,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private static final String TAG = "MainActivity";
 
-    private static List<String> DataToDisplay, DebugData;
+    private static List<String> DataToDisplay;
 
-    public static String FuelType ;
+    public static String FuelType;
+    public static List<String> DebugData;
     //= "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
     // Also, should consider creating an object instad of using List<String>
 
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 textView2.setText(DataToDisplay.get(1) + " \n" + DataToDisplay.get(2) + " \n" + DataToDisplay.get(3));
             }
             if(DebugData != null) {
-                textView3.setText(DebugData.get(1) + "\n" + DebugData.get(2) + "\n" + DebugData.get(3) + "\n" + DebugData.get(4));
+                textView3.setText(DebugData.get(0) + "\n" + DebugData.get(1) + "\n" + DebugData.get(2) );// + "\n" + DebugData.get(4));
             }
             priceUpdateService.setDataPrevious(DataToDisplay);
 
@@ -163,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
             getDataFromServer.fetch(FuelType);
             DataToDisplay = getDataFromServer.get();
-            DebugData = getDataFromServer.getDebugData();
+
+            //DebugData = getDataFromServer.getDebugData();
 
 
 
