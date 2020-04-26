@@ -1,11 +1,15 @@
 package com.example.testapp;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.testapp.FuelData.*;
 
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FuelDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "fueldata.db";
@@ -30,7 +34,30 @@ public class FuelDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS" + FuelEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + FuelEntry.TABLE_NAME);
         onCreate(db);
     }
+
+    public List<String> getLastFuelData(){
+        List<String> FuelData = new ArrayList<String>();
+        String name = "Neste Futura D";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(FuelEntry.TABLE_NAME, new String[]{FuelEntry.COLUMN_NAME,FuelEntry.COLUMN_PRICE,FuelEntry.COLUMN_PLACE,FuelEntry.COLUMN_TIMESTAMP},
+                                    FuelEntry.COLUMN_NAME+"=?", new String[]{name},null,null,null);
+        if (cursor != null) cursor.moveToLast();
+
+        FuelData.add(cursor.getString(1));
+        FuelData.add(cursor.getString(2));
+        FuelData.add(cursor.getString(3));
+        FuelData.add(cursor.getString(4));
+
+        return FuelData;
+
+
+    }
+
+
+
 }

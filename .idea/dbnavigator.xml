@@ -24,8 +24,11 @@
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
     <loaded-nodes>
+      <connection connection-id="f732d4c1-f863-43bf-bfea-2821303e52b7">
+        <schema name="main" object-types="view, table, constraint, column, index, dataset trigger" />
+      </connection>
       <connection connection-id="b8a0625d-f3fc-4716-9674-fc624af9ee99">
-        <schema name="main" object-types="dataset trigger, constraint, table, view, column, index" />
+        <schema name="main" object-types="view, table, constraint, column, index, dataset trigger" />
       </connection>
     </loaded-nodes>
   </component>
@@ -38,16 +41,21 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="f732d4c1-f863-43bf-bfea-2821303e52b7" object-ref="schemas/main/tables/FuelData" />
+    </open-files>
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="f732d4c1-f863-43bf-bfea-2821303e52b7" />
     <connection id="b8a0625d-f3fc-4716-9674-fc624af9ee99" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="f732d4c1-f863-43bf-bfea-2821303e52b7" dataset="main.FuelData" active-filter-id="EMPTY_FILTER">
+    <filter-actions connection-id="f732d4c1-f863-43bf-bfea-2821303e52b7" dataset="main.FuelData" active-filter-id="483d2449-30a8-4754-a22c-5055398b3250">
       <filter id="612c772d-848b-4c75-98b7-5f7e22ee611b" name="2" temporary="false" custom-name="false" type="basic" join-type="AND">
         <condition column="_id" operator="=" value="2" active="true" />
+      </filter>
+      <filter id="483d2449-30a8-4754-a22c-5055398b3250" name="Neste Futura D" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="name" operator="=" value="Neste Futura D" active="true" />
       </filter>
     </filter-actions>
     <filter-actions connection-id="b8a0625d-f3fc-4716-9674-fc624af9ee99" dataset="main.FuelData" active-filter-id="EMPTY_FILTER" />

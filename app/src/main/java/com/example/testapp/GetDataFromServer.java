@@ -30,7 +30,7 @@ public class GetDataFromServer  {
         this.mDataBase = mDataBase;
     }
 
-    private static List<String> DataToDisplay;
+    private static List<String> DataToDisplay, DebugData;
 
     static final int GLOBAL = 0;
     static final int LOCAL_PAPS = 1;
@@ -47,6 +47,10 @@ public class GetDataFromServer  {
         return this.DataToDisplay;
     }
 
+    public List<String> getDebugData(){
+
+        return this.DebugData;
+    }
 
     public void fetch(@org.jetbrains.annotations.NotNull String FuelType){
 
@@ -108,11 +112,14 @@ public class GetDataFromServer  {
 
                 mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
 
+                DebugData = dbHelper.getLastFuelData();
 
+                // String operations
                 FuelData.add(title);
                 FuelData.add(name);
                 FuelData.add(price);
                 FuelData.add(place);
+
                 DataToDisplay = FuelData;
 
 

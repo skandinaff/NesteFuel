@@ -22,11 +22,15 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView textView, textView2;
+    private TextView textView, textView2, textView3;
     private Button button;
     private static final String TAG = "MainActivity";
-    private static List<String> DataToDisplay;
-    public static String FuelType ;//= "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
+
+    private static List<String> DataToDisplay, DebugData;
+
+    public static String FuelType ;
+    //= "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
+    // Also, should consider creating an object instad of using List<String>
 
     ProgressDialog progressDialog;
 
@@ -52,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
+        textView3 = (TextView) findViewById(R.id.textView3);
+
         button = (Button) findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +86,13 @@ public class MainActivity extends AppCompatActivity {
         jobBegin();
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        //radioGroup.clearCheck(); In SQL
     }
 
 
@@ -127,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.setMessage("Connecting to outer space...");
             progressDialog.show();
 
+
         }
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -137,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
                 textView.setText(DataToDisplay.get(0));
                 textView2.setText(DataToDisplay.get(1) + " \n" + DataToDisplay.get(2) + " \n" + DataToDisplay.get(3));
             }
+            if(DebugData != null) {
+                textView3.setText(DebugData.get(1) + "\n" + DebugData.get(2) + "\n" + DebugData.get(3) + "\n" + DebugData.get(4));
+            }
             priceUpdateService.setDataPrevious(DataToDisplay);
 
         }
@@ -146,6 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
             getDataFromServer.fetch(FuelType);
             DataToDisplay = getDataFromServer.get();
+            DebugData = getDataFromServer.getDebugData();
+
 
 
             return null;
