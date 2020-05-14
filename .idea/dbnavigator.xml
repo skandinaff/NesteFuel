@@ -24,11 +24,8 @@
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
     <loaded-nodes>
-      <connection connection-id="f732d4c1-f863-43bf-bfea-2821303e52b7">
-        <schema name="main" object-types="view, table, constraint, column, index, dataset trigger" />
-      </connection>
       <connection connection-id="b8a0625d-f3fc-4716-9674-fc624af9ee99">
-        <schema name="main" object-types="view, table, constraint, column, index, dataset trigger" />
+        <schema name="main" object-types="view, table" />
       </connection>
     </loaded-nodes>
   </component>
@@ -41,9 +38,7 @@
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="f732d4c1-f863-43bf-bfea-2821303e52b7" object-ref="schemas/main/tables/FuelData" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
     <connection id="f732d4c1-f863-43bf-bfea-2821303e52b7" />

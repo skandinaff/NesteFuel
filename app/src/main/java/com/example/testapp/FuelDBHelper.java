@@ -38,7 +38,7 @@ public class FuelDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public List<String> getLastFuelData(){
+    public List<String> getLastFuelData(int howmany){
         List<String> FuelData = new ArrayList<String>();
         String name = "Neste Futura D";
 
@@ -46,12 +46,15 @@ public class FuelDBHelper extends SQLiteOpenHelper {
 
         Cursor cursor = db.query(FuelEntry.TABLE_NAME, new String[]{FuelEntry.COLUMN_NAME,FuelEntry.COLUMN_PRICE,FuelEntry.COLUMN_PLACE,FuelEntry.COLUMN_TIMESTAMP},
                                     FuelEntry.COLUMN_NAME+"=?", new String[]{name},null,null,null);
+
         if (cursor != null) cursor.moveToLast();
 
-        FuelData.add(cursor.getString(1));
-        FuelData.add(cursor.getString(2));
-        FuelData.add(cursor.getString(3));
-        //FuelData.add(cursor.getString(4));
+        for (int i=0;i<howmany;i++){
+            if(i != 0) cursor.moveToPrevious();
+            //FuelData.add(cursor.getString(2));
+            FuelData.add(cursor.getString(3));
+            FuelData.add(cursor.getString(1));
+        }
 
         return FuelData;
 

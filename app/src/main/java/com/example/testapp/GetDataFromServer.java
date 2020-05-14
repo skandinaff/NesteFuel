@@ -115,7 +115,7 @@ public class GetDataFromServer  {
 
                 mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
 
-                DebugData = dbHelper.getLastFuelData();
+                DebugData = dbHelper.getLastFuelData(3);
 
                 // String operations
                 FuelData.add(title);

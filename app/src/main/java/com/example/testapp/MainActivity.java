@@ -153,7 +153,9 @@ public class MainActivity extends AppCompatActivity {
                 textView2.setText(DataToDisplay.get(1) + " \n" + DataToDisplay.get(2) + " \n" + DataToDisplay.get(3));
             }
             if(DebugData != null) {
-                textView3.setText(DebugData.get(0) + "\n" + DebugData.get(1) + "\n" + DebugData.get(2) );// + "\n" + DebugData.get(4));
+                textView3.setText(DebugData.get(0) + "\n" + DebugData.get(1) + "\n" + DebugData.get(2)
+                        + "\n" + DebugData.get(3) + "\n" + DebugData.get(4) + "\n" + DebugData.get(5) );
+                      //  + "\n" + DebugData.get(6) + "\n" + DebugData.get(7) + "\n" + DebugData.get(8));
             }
             priceUpdateService.setDataPrevious(DataToDisplay);
 
