@@ -27,6 +27,7 @@ public class PriceUpdateService extends JobService {
     private boolean jobCancelled = false;
     private NotificationManagerCompat notificationManager;
     private List<String> DataToDisplay;
+    private List<String> PreviousData;
 
     FuelDBHelper dbHelper = new FuelDBHelper(this);
 
@@ -53,12 +54,8 @@ public class PriceUpdateService extends JobService {
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_local_gas_station_black_24dp)
                 .setContentIntent(contentIntent)
-
                 .setAutoCancel(true);
-                ;//.notification.build();
-
-
-        notificationManager.notify(1,notification.build());
+                notificationManager.notify(1,notification.build());
 
     }
 
@@ -78,21 +75,15 @@ public class PriceUpdateService extends JobService {
             public void run() {
 
                 getDataFromServer.fetch(FuelType,0); // For notification we need only new fuel price, hence debugEntriesCount =0
-
                 DataToDisplay = getDataFromServer.get();
-
                 Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
                 logTimestamp();
+                PreviousData = dbHelper.getLastFuelData(FuelType, 0);
+                if(DataToDisplay.equals(PreviousData)){
 
-                if (DataToDisplay.equals(dbHelper.getLastFuelData(FuelType, 1))) { // TODO consider refactoring this. ALSO DataPrevious = Null if we checked price with button.
-
-                }else{
+                }else {
                     showNotification();
                 }
-
-                // DataPrevious = DataToDisplay; // not needed?
-                //TODO Compating to DB value shoud happen here, as this thread will be only thing that is active in the background
-
             }
         }).start();
 
@@ -104,9 +95,4 @@ public class PriceUpdateService extends JobService {
         jobCancelled = true;
         return true;
     }
-/*
-    public static void setDataPrevious(List<String> DataPreviousFromButton){ //TODO: this methode is aobsolete and unnecessary, as we now use SQL DB
-        DataPrevious = DataPreviousFromButton;
-    }
-*/
 }

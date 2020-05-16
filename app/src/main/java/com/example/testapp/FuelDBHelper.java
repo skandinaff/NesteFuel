@@ -61,7 +61,14 @@ public class FuelDBHelper extends SQLiteOpenHelper {
 
         if (entriesCount > fuelTypeCount) entriesCount = (int)fuelTypeCount; // Checking if we haven't requested more entries than there are in DB
         for (int i=0;i<=entriesCount;i++){
-            if(i==0) {
+            if(i==0 && entriesCount == 0) { // Special case for comparing in background process.
+                cursor.moveToPrevious();
+                FuelData.add("Degvielas cenas | Neste");
+                FuelData.add(cursor.getString(0)); // Place
+                FuelData.add(cursor.getString(1)); // Price
+                FuelData.add(cursor.getString(2)); // Timestamp
+            }
+            if(i==0 && entriesCount != 0){
                 FuelData.add(cursor.getString(1)); // Price
                 FuelData.add(cursor.getString(3)); // Timestamp
             }

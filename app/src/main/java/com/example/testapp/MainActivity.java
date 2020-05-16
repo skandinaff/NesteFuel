@@ -132,14 +132,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
-            //priceUpdateService.setDataPrevious(DataToDisplay); // For comparison on the next iteration
         }
 
         @Override
         protected Void doInBackground(Void... voids){
             getDataFromServer.fetch(FuelType, entries);
             DataToDisplay = getDataFromServer.get();
-            //DebugData = getDataFromServer.getDebugData(); //TODO: consider removing
             return null;
         }
     }
