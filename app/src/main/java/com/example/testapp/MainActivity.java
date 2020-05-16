@@ -26,19 +26,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView, textView2, textView3;
     private Button button;
     private static final String TAG = "MainActivity";
-
     private static List<String> DataToDisplay;
-
     public static String FuelType;
-    public static List<String> DebugData;
-    //= "Diesel"; // Do I need it in MainActivity? Should create a better solution to where store fuel Type
-    // Also, should consider creating an object instad of using List<String>
+    public static List<String> DebugData; // TODO: create a better solution than using a global variable!!!
+    int entries = 5; // Number of Fuel data (Price+timestapm+...etc to show as dbug info
 
     ProgressDialog progressDialog;
-
     RadioGroup radioGroup;
     RadioButton radioButton;
-
 
     public static SQLiteDatabase mDatabase;
 
@@ -51,26 +46,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         mDatabase = dbHelper.getWritableDatabase();
-
-
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
         textView3 = (TextView) findViewById(R.id.textView3);
-
         button = (Button) findViewById(R.id.button);
-
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 Content content = new Content();
-
                 if(FuelType == null) {
                     Toast.makeText(MainActivity.this, "Please, select Fuel Type First!",
                             Toast.LENGTH_LONG).show();
-
                 }else {
                     content.execute();
                 }
@@ -78,29 +65,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         radioGroup = findViewById(R.id.radioGroup);
-
         getDataFromServer = new GetDataFromServer(dbHelper, mDatabase);
-
         priceUpdateService = new PriceUpdateService();
-
-
-
         jobBegin();
-
-
     }
 
     @Override
     protected void onDestroy() {
-
         super.onDestroy();
-        //radioGroup.clearCheck(); In SQL
     }
-
-
-
-
-
     public void jobBegin() { //The job being was unassigned from button to run it automatically.
         ComponentName componentName = new ComponentName(this, PriceUpdateService.class);
         JobInfo info = new JobInfo.Builder(123,componentName)
@@ -117,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void jobCancel(View view) {
-        //Do I really need this button? Maybe hide it in 3 points menu
+    public void jobCancel(View view) { //Do I really need this button? Maybe hide it in 3 points menu
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.cancel(123);
         Log.d(TAG,"Job cancelled");
@@ -127,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
     public void checkRadioButton(View view) {
         int radioId = radioGroup.getCheckedRadioButtonId();
         radioButton = findViewById(radioId);
-
         Log.d(TAG,"RadioButton Text is: " + radioButton.getText() );
         FuelType = radioButton.getText().toString();
     }
@@ -137,12 +108,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             progressDialog = new ProgressDialog(MainActivity.this);
             progressDialog.setMessage("Connecting to outer space...");
             progressDialog.show();
-
-
         }
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -154,28 +122,24 @@ public class MainActivity extends AppCompatActivity {
                 textView2.setText(DataToDisplay.get(1) + " \n" + DataToDisplay.get(2) + " \n" + DataToDisplay.get(3));
             }
             if(DebugData != null) {
-                int howmany = 6;
-                textView3.setText("");
+                int howmany = 2*entries; //TODO: refactor this name. 2 is number of actual DB rows i.e. Price, Timestamp etc.
+                textView3.setText("Previous prices:\n");
                 for(int i = 0; i < howmany; i++){
-                    textView3.append(DebugData.get(i) + "\n");
+                    try {
+                        textView3.append(DebugData.get(i) + "\n");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-
             }
-
-            priceUpdateService.setDataPrevious(DataToDisplay);
-
+            //priceUpdateService.setDataPrevious(DataToDisplay); // For comparison on the next iteration
         }
 
         @Override
         protected Void doInBackground(Void... voids){
-
-            getDataFromServer.fetch(FuelType);
+            getDataFromServer.fetch(FuelType, entries);
             DataToDisplay = getDataFromServer.get();
-
-            //DebugData = getDataFromServer.getDebugData();
-
-
-
+            //DebugData = getDataFromServer.getDebugData(); //TODO: consider removing
             return null;
         }
     }

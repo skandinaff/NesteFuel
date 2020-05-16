@@ -23,7 +23,7 @@ import static com.example.testapp.MainActivity.FuelType;
 
 public class PriceUpdateService extends JobService {
     public static final String TAG = "PriceUpdateService";
-    private static List<String> DataPrevious;
+    //private static List<String> DataPrevious;
     private boolean jobCancelled = false;
     private NotificationManagerCompat notificationManager;
     private List<String> DataToDisplay;
@@ -36,12 +36,8 @@ public class PriceUpdateService extends JobService {
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "Job Started");
         logTimestamp();
-
         notificationManager = NotificationManagerCompat.from(this);
         GetDataFromNeste(params);
-
-
-
         return true;
     }
 
@@ -71,14 +67,17 @@ public class PriceUpdateService extends JobService {
         String format = simpleDateFormat.format(new Date());
         Log.d("MainActivity", "Current Timestamp: " + format);
     }
-
+    /**
+     * This function is being called once every {android allowed time interval}
+     *  To check if there is price change.
+     */
     public void GetDataFromNeste(final JobParameters params) {
 
         new Thread(new Runnable(){
             @Override
             public void run() {
 
-                getDataFromServer.fetch(FuelType);
+                getDataFromServer.fetch(FuelType,0); // For notification we need only new fuel price, hence debugEntriesCount =0
 
                 DataToDisplay = getDataFromServer.get();
 
@@ -105,9 +104,9 @@ public class PriceUpdateService extends JobService {
         jobCancelled = true;
         return true;
     }
-
-    public static void setDataPrevious(List<String> DataPreviousFromButton){
+/*
+    public static void setDataPrevious(List<String> DataPreviousFromButton){ //TODO: this methode is aobsolete and unnecessary, as we now use SQL DB
         DataPrevious = DataPreviousFromButton;
     }
-
+*/
 }

@@ -41,44 +41,38 @@ public class FuelDBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + FuelEntry.TABLE_NAME);
         onCreate(db);
     }
-
-    public List<String> getLastFuelData(String fueltype, int howmany){
+    /**
+    * This function gets last fuel data form DB.
+    */
+    public List<String> getLastFuelData(String fueltype, int entriesCount){
         List<String> FuelData = new ArrayList<String>();
-        //String name = "Neste Futura D";
-        String name = fueltype;//"Neste Futura D";
-
+        String name = fueltype;
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.query(FuelEntry.TABLE_NAME, new String[]{
                         FuelEntry.COLUMN_NAME,
                         FuelEntry.COLUMN_PRICE,
                         FuelEntry.COLUMN_PLACE,
                         FuelEntry.COLUMN_TIMESTAMP
                 },
-                FuelEntry.COLUMN_NAME+"=?", new String[]{name},null,null,null);
+                FuelEntry.COLUMN_NAME+"=?", new String[]{fueltype},null,null,null);
 
         long fuelTypeCount = DatabaseUtils.queryNumEntries(db,FuelEntry.TABLE_NAME,FuelEntry.COLUMN_NAME + " = '" + name+"'");//,new String[] {name});
-        //long fuelTypeCount = DatabaseUtils.queryNumEntries(db,FuelEntry.TABLE_NAME);
-
-        //String selectQuery = "SELECT * from " + FuelEntry.TABLE_NAME + " where " + FuelEntry.COLUMN_NAME + " =? ";
-        //long abc = db.rawQuery(selectQuery, new String[] {name});
-
         if (cursor != null) cursor.moveToLast();
 
-        for (int i=0;i<fuelTypeCount;i++){
-            if(i != 0) {
-                if(cursor.moveToPrevious()){
-                    FuelData.add(cursor.getString(2));
-                    FuelData.add(cursor.getString(3));
-                    FuelData.add(cursor.getString(1));
-                } else{
-                    FuelData.add(valueOf(howmany - i));
-                }
+        if (entriesCount > fuelTypeCount) entriesCount = (int)fuelTypeCount; // Checking if we haven't requested more entries than there are in DB
+        for (int i=0;i<=entriesCount;i++){
+            if(i==0) {
+                FuelData.add(cursor.getString(1)); // Price
+                FuelData.add(cursor.getString(3)); // Timestamp
             }
-
+            else if (i !=0 && cursor.moveToPrevious())
+            {
+                FuelData.add(cursor.getString(1)); // Price
+                FuelData.add(cursor.getString(3)); // Timestamp
+            }
         }
 
-        return FuelData;
+        return FuelData; // Need to return entriesCount as well, so we can reduce
 
 
     }

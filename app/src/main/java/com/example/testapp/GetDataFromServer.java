@@ -55,15 +55,22 @@ public class GetDataFromServer  {
         return this.DebugData;
     }
 */
-    public void fetch(@org.jetbrains.annotations.NotNull String FuelType){
 
-
+/**
+ * This fucntion actually goes and parses the webpage for price changes.
+ * It will be called from PriceUpdateService every so often.
+ * It will be also called from MainActivity once the button is pressed.
+ *
+ */
+    public void fetch(@org.jetbrains.annotations.NotNull String FuelType, int debugEntriesCount){
 
         List<String> urls = new ArrayList<String>();
-        urls.add("https://www.neste.lv/lv/content/degvielas-cenas/");
-        urls.add("http://192.168.2.222/neste/cenas.html");
-        urls.add("http://192.168.123.17/neste/cenas.html");
-        urls.add("http://localhost/neste/cenas.html");
+        {
+            urls.add("https://www.neste.lv/lv/content/degvielas-cenas/");
+            urls.add("http://192.168.2.222/neste/cenas.html");
+            urls.add("http://192.168.123.17/neste/cenas.html");
+            urls.add("http://localhost/neste/cenas.html");
+        }
 
         switch (FuelType) {
             case "Neste Futura 95":
@@ -82,12 +89,9 @@ public class GetDataFromServer  {
                 xFUELTYPE = 0;
                 break;
         }
-
         String title, name, price, place;
         float fprice;
         List<String> FuelData = new ArrayList<String>();
-
-
             try {
                 Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
                 title = doc.title();
@@ -115,7 +119,7 @@ public class GetDataFromServer  {
 
                 mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
 
-                DebugData = dbHelper.getLastFuelData(FuelType,3);
+                if(debugEntriesCount != 0) DebugData = dbHelper.getLastFuelData(FuelType,debugEntriesCount); // Does this really need to be here ???
 
                 // String operations
                 FuelData.add(title);
@@ -124,8 +128,6 @@ public class GetDataFromServer  {
                 FuelData.add(place);
 
                 DataToDisplay = FuelData;
-
-
 
             } catch (
                     IOException e) {
