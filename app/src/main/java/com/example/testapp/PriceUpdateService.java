@@ -85,13 +85,13 @@ public class PriceUpdateService extends JobService {
                 Log.d(TAG, "Here's what we've fetched: " + DataToDisplay.get(0) + "   " + DataToDisplay.get(1) + "   " + DataToDisplay.get(2) + "   " + DataToDisplay.get(3));
                 logTimestamp();
 
-                if (DataToDisplay.equals(DataPrevious)) { // TODO consider refactoring this. ALSO DataPrevious = Null if we checked price with button.
+                if (DataToDisplay.equals(dbHelper.getLastFuelData(FuelType, 1))) { // TODO consider refactoring this. ALSO DataPrevious = Null if we checked price with button.
 
                 }else{
                     showNotification();
                 }
 
-                DataPrevious = DataToDisplay;
+                // DataPrevious = DataToDisplay; // not needed?
                 //TODO Compating to DB value shoud happen here, as this thread will be only thing that is active in the background
 
             }

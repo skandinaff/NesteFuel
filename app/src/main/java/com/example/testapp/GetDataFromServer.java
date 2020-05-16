@@ -66,16 +66,16 @@ public class GetDataFromServer  {
         urls.add("http://localhost/neste/cenas.html");
 
         switch (FuelType) {
-            case "Petrol 95":
+            case "Neste Futura 95":
                 xFUELTYPE = 1;
                 break;
-            case "Petrol 98":
+            case "Neste Futura 98":
                 xFUELTYPE = 2;
                 break;
-            case "Diesel":
+            case "Neste Futura D":
                 xFUELTYPE = 3;
                 break;
-            case "Diesel PRO":
+            case "Neste Pro Diesel":
                 xFUELTYPE = 4;
                 break;
             default:
@@ -115,7 +115,7 @@ public class GetDataFromServer  {
 
                 mDataBase.insert(FuelEntry.TABLE_NAME, null, cv);
 
-                DebugData = dbHelper.getLastFuelData(3);
+                DebugData = dbHelper.getLastFuelData(FuelType,3);
 
                 // String operations
                 FuelData.add(title);

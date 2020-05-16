@@ -1,5 +1,6 @@
 package com.example.testapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.app.job.JobInfo;
@@ -153,10 +154,14 @@ public class MainActivity extends AppCompatActivity {
                 textView2.setText(DataToDisplay.get(1) + " \n" + DataToDisplay.get(2) + " \n" + DataToDisplay.get(3));
             }
             if(DebugData != null) {
-                textView3.setText(DebugData.get(0) + "\n" + DebugData.get(1) + "\n" + DebugData.get(2)
-                        + "\n" + DebugData.get(3) + "\n" + DebugData.get(4) + "\n" + DebugData.get(5) );
-                      //  + "\n" + DebugData.get(6) + "\n" + DebugData.get(7) + "\n" + DebugData.get(8));
+                int howmany = 6;
+                textView3.setText("");
+                for(int i = 0; i < howmany; i++){
+                    textView3.append(DebugData.get(i) + "\n");
+                }
+
             }
+
             priceUpdateService.setDataPrevious(DataToDisplay);
 
         }

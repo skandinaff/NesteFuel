@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="checkRadioButton"
-            android:text="Petrol 95"
+            android:text="Neste Futura 95"
             android:textSize="28dp" />
 
         <RadioButton
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="checkRadioButton"
-            android:text="Petrol 98"
+            android:text="Neste Futura 98"
             android:textSize="28dp" />
 
         <RadioButton
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
 
             android:onClick="checkRadioButton"
-            android:text="Diesel"
+            android:text="Neste Futura D"
             android:textSize="28dp" />
 
         <RadioButton
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="checkRadioButton"
-            android:text="Diesel PRO"
+            android:text="Neste Pro Diesel"
             android:textSize="28dp" />
     </RadioGroup>
 
