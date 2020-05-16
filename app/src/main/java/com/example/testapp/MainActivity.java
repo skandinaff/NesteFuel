@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button;
     private static final String TAG = "MainActivity";
     private static List<String> DataToDisplay;
-    public static String FuelType;
+    public static String FuelType; // TODO: ger rid of global variable
     public static List<String> DebugData; // TODO: create a better solution than using a global variable!!!
     int entries = 5; // Number of Fuel data (Price+timestapm+...etc to show as dbug info
 

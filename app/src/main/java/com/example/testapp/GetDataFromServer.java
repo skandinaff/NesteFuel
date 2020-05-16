@@ -93,7 +93,7 @@ public class GetDataFromServer  {
         float fprice;
         List<String> FuelData = new ArrayList<String>();
             try {
-                Document doc = Jsoup.connect(urls.get(GLOBAL)).get();
+                Document doc = Jsoup.connect(urls.get(LOCAL_HOME)).get();
                 title = doc.title();
 
                 Elements node = doc.getElementsByClass("even");
