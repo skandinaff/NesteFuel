@@ -77,13 +77,13 @@ public class FuelDBHelper extends SQLiteOpenHelper {
                 FuelData.add(cursor.getString(1)); // Price
                 FuelData.add(cursor.getString(3)); // Timestamp
             }
+            //TODO: write a method (or a part of this one) that would compare a just extracted data from DB to extracted just before that, to avoid adding data with same price.
         }
 
         return FuelData; // Need to return entriesCount as well, so we can reduce
 
 
     }
-
 
 
 }

@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public static String FuelType; // TODO: ger rid of global variable
     public static List<String> DebugData; // TODO: create a better solution than using a global variable!!!
     int entries = 5; // Number of Fuel data (Price+timestapm+...etc to show as dbug info
+    int JobPeriod = 15; // Minimal allowed time interval = 15 minutes. anything less than that will default to 15 minutes.
 
     ProgressDialog progressDialog;
     RadioGroup radioGroup;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         ComponentName componentName = new ComponentName(this, PriceUpdateService.class);
         JobInfo info = new JobInfo.Builder(123,componentName)
                 .setPersisted(true)
-                .setPeriodic(1*60*1000)
+                .setPeriodic(JobPeriod*60*1000) //  Period = X minutes * 60 seconds * 1000 ms
                 .build();
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
