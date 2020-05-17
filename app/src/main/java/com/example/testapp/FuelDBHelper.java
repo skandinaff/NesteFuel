@@ -58,9 +58,9 @@ public class FuelDBHelper extends SQLiteOpenHelper {
 
         long fuelTypeCount = DatabaseUtils.queryNumEntries(db,FuelEntry.TABLE_NAME,FuelEntry.COLUMN_NAME + " = '" + name+"'");//,new String[] {name});
         if (cursor != null) cursor.moveToLast();
-
         if (entriesCount > fuelTypeCount) entriesCount = (int)fuelTypeCount; // Checking if we haven't requested more entries than there are in DB
         for (int i=0;i<=entriesCount;i++){
+
             if(i==0 && entriesCount == 0) { // Special case for comparing in background process.
                 cursor.moveToPrevious();
                 FuelData.add("Degvielas cenas | Neste");
@@ -70,18 +70,34 @@ public class FuelDBHelper extends SQLiteOpenHelper {
             }
             if(i==0 && entriesCount != 0){
                 FuelData.add(cursor.getString(1)); // Price
+                FuelData.add(cursor.getString(2)); // Place
                 FuelData.add(cursor.getString(3)); // Timestamp
             }
             else if (i !=0 && cursor.moveToPrevious())
             {
-                FuelData.add(cursor.getString(1)); // Price
-                FuelData.add(cursor.getString(3)); // Timestamp
+
+                if(DataPointsComparison(FuelData,cursor)==true) //Last value in the FuelData != cursor getString()
+                {
+                    FuelData.add(cursor.getString(1)); // Price
+                    FuelData.add(cursor.getString(2)); // Place
+                    FuelData.add(cursor.getString(3)); // Timestamp
+                }
+                else i--;
             }
-            //TODO: write a method (or a part of this one) that would compare a just extracted data from DB to extracted just before that, to avoid adding data with same price.
         }
-
         return FuelData; // Need to return entriesCount as well, so we can reduce
-
+    }
+    private boolean DataPointsComparison(List<String> DataPrev, Cursor cursorToData){
+        /* Just for debugging.
+        String price = DataPrev.get(DataPrev.size() - 3);
+        String place = DataPrev.get(DataPrev.size() - 2);
+        String pricePrev = cursorToData.getString(1);
+        String placePrev = cursorToData.getString(2);
+        */
+        if((DataPrev.get(DataPrev.size() - 3)).equals(cursorToData.getString(1))
+        ||  (DataPrev.get(DataPrev.size() - 2)).equals(cursorToData.getString(2))){
+            return false;
+        } else return true;
 
     }
 
